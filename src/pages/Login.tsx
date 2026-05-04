@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -17,8 +17,14 @@ type LoginFormValues = z.infer<typeof loginSchema>
 
 export function Login() {
   const navigate = useNavigate()
-  const setAuth = useAppStore((state) => state.setAuth)
+  const { setAuth, isAuthenticated } = useAppStore()
   const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/')
+    }
+  }, [isAuthenticated, navigate])
 
   const {
     register,
